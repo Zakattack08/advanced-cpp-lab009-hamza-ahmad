@@ -34,21 +34,35 @@ bool MaxHeap::contains(int value) const {
 }
 
 void MaxHeap::push(int value) {
-    (void)value;
-    throw std::logic_error("Student implementation required: push");
+    data_.push_back(value);
+    heapifyUp(data_.size()-1); //restore heap structure starting with the element just added
 }
 
 int MaxHeap::pop() {
-    throw std::logic_error("Student implementation required: pop");
+    if (empty()) throw std::logic_error("Heap is empty");
+    swap(data_[0], data_.back()); //swap root and leftmost 0 height node
+    int val = data_.back(); //store return value
+    data_.pop_back(); //delete node that was root
+    heapifyDown(0); //restore heap structure starting with root
+    return val;
 }
 
 void MaxHeap::buildHeap(const std::vector<int>& values) {
-    (void)values;
-    throw std::logic_error("Student implementation required: buildHeap");
+    for (int i : values)
+        data_.push_back(i); //insert values into data
+    
+    //initialize operand to rightmost parent and for loop stop to i reaching root
+for (std::size_t i = data_.size() / 2; i > 0; --i)
+    heapifyDown(i - 1);
 }
 
 std::vector<int> MaxHeap::heapSort() {
-    throw std::logic_error("Student implementation required: heapSort");
+    std::vector<int> vec;
+    while (!empty()) {
+        vec.push_back(this->pop()); //insert all elements of this into vec
+    }
+    std::reverse(vec.begin(), vec.end());
+    return vec;
 }
 
 std::vector<int> MaxHeap::toVector() const {
@@ -71,13 +85,26 @@ std::size_t MaxHeap::rightChildIndex(std::size_t index) {
 }
 
 void MaxHeap::heapifyUp(std::size_t index) {
-    (void)index;
-    throw std::logic_error("Student implementation required: heapifyUp");
+    size_t p = parentIndex(index); // get parent index
+    if (data_[p] < data_[index]) { // swap if needed
+        swap(data_[index],data_[p]);
+        heapifyUp(p);
+    }
+    return; // else break
 }
 
 void MaxHeap::heapifyDown(std::size_t index) {
-    (void)index;
-    throw std::logic_error("Student implementation required: heapifyDown");
+    size_t c;
+    size_t cLeft = leftChildIndex(index);
+    if (cLeft > data_.size()-1) return; //if at leaf node stop
+    if (cLeft+1 > data_.size()-1) c = cLeft; //if right child doesn't exist
+    else c = (data_[cLeft] > data_[cLeft+1]) ? cLeft : cLeft+1; //get max child index
+
+    if (data_[c] > data_[index]) { // swap if needed
+        swap(data_[index],data_[c]);
+        heapifyDown(c);
+    }
+    return; // else break
 }
 
 void MaxHeap::swap(int& a, int& b) {

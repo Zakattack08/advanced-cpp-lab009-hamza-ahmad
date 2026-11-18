@@ -40,9 +40,12 @@ $(BUILD_DIR)/%.o: $(TEST_DIR)/%.cpp | $(BUILD_DIR)
 $(EXECUTABLE): $(MAIN_OBJ) $(OBJ)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
-# Build and run tests — IMPORTANT: DO NOT LINK main.o
-test: $(OBJ) $(TEST_OBJ)
-	$(CXX) $(CXXFLAGS) $(OBJ) $(TEST_OBJ) -o $(TEST_EXECUTABLE)
+# Build test executable — IMPORTANT: DO NOT LINK main.o
+$(TEST_EXECUTABLE): $(OBJ) $(TEST_OBJ)
+	$(CXX) $(CXXFLAGS) $(OBJ) $(TEST_OBJ) -o $@
+
+# Build and run tests
+test: $(TEST_EXECUTABLE)
 	./$(TEST_EXECUTABLE)
 
 run: $(EXECUTABLE)
