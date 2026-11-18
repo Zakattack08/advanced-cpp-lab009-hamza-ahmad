@@ -96,8 +96,8 @@ void MaxHeap::heapifyUp(std::size_t index) {
 void MaxHeap::heapifyDown(std::size_t index) {
     size_t c;
     size_t cLeft = leftChildIndex(index);
-    if (cLeft > data_.size()-1) return; //if at leaf node stop
-    if (cLeft+1 > data_.size()-1) c = cLeft; //if right child doesn't exist
+    if (cLeft >= data_.size()) return; //if at leaf node stop
+    if (cLeft + 1 >= data_.size()) c = cLeft; //if right child doesn't exist
     else c = (data_[cLeft] > data_[cLeft+1]) ? cLeft : cLeft+1; //get max child index
 
     if (data_[c] > data_[index]) { // swap if needed
